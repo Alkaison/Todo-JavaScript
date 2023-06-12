@@ -110,15 +110,30 @@ body {
 #clearAllTaskText {
     color: rgb(32, 28, 28);
     letter-spacing: 0.8px;
+    padding: 2px 4px;
 }
 #clearAllTaskBtn {
     width: 100px;
-    padding: 8px 0;
+    padding: 8px;
     color: white;
     background-color: #8E49E9;
     border-radius: 4px;
+    white-space: nowrap;
     font-size: 18px;
     border: 1px solid white;
     outline: transparent;
     cursor: pointer;
+}
+/* Responsive Design */
+@media screen and (max-width: 450px) {
+    .container {
+        width: 90vw;
+        padding: 8px;
+    }
+    .taskText {
+        width: 70vw;
+    }
+    #clearAllTaskBtn {
+        width: 30vw;
+    }
 }
