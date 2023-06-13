@@ -15,8 +15,9 @@ const completedTask = (task) => {
 const editTaskText = (task) => {
     
     // make the task text editable 
-    const editTaskText = taskElement.querySelector(".taskText"); 
+    const editTaskText = task.querySelector(".taskText");
     editTaskText.setAttribute("contenteditable", "true");
+    editTaskText.focus();
 }
 
 // add the task when click 
@@ -61,7 +62,7 @@ taskContainer.addEventListener("click", (e) => {
             case 'task':
                 break;
             case 'edit':
-                editTaskText(clickedElement);
+                editTaskText(taskElement);
                 break;
             case 'delete':
                 break;
@@ -74,6 +75,6 @@ clearAllTaskBtn.addEventListener("click", () => {
 
     if(confirm("All the tasks will be cleared permanently."))
     {
-        // taskContainer.removeChild();
+        taskContainer.setHTML('');
     }
 });
