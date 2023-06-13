@@ -68,11 +68,14 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 12px;
+    text-align: center;
 }
 .pendingSvg {
-    width: 20px;
-    height: 20px;
-    fill: rgb(0, 0, 0);
+    width: 30px;
+    height: 30px;
+    padding-top: 7px;
+    font-size: 18px;
+    color: rgb(0, 0, 0);
     cursor: pointer;
 }
 .taskText {
@@ -80,21 +83,24 @@ body {
     word-wrap: break-word;
     color: rgb(32, 28, 28);
     line-height: 1.4rem;
-    padding-left: 4px;
+    text-align: left;
 }
 .editSvg {
     width: 30px;
     height: 30px;
-    padding: 5px;
+    padding-top: 7px;
+    font-size: 18px;
+    color:rgb(32, 28, 28);
     border-radius: 4px;
     cursor: pointer;
 }
 .deleteSvg {
     width: 30px;
     height: 30px;
-    padding: 6px;
+    padding-top: 7px;
+    font-size: 18px;
     border-radius: 4px;
-    fill: white;
+    color: white;
     background-color: red;
     cursor: pointer;
 }
