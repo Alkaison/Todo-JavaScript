@@ -69,19 +69,18 @@ body {
     align-items: center;
     margin-bottom: 12px;
     text-align: center;
+    color:rgb(32, 28, 28);
 }
 .pendingSvg {
     width: 30px;
     height: 30px;
     padding-top: 7px;
     font-size: 18px;
-    color: rgb(0, 0, 0);
     cursor: pointer;
 }
 .taskText {
     width: 270px;
     word-wrap: break-word;
-    color: rgb(32, 28, 28);
     line-height: 1.4rem;
     text-align: left;
 }
@@ -90,7 +89,6 @@ body {
     height: 30px;
     padding-top: 7px;
     font-size: 18px;
-    color:rgb(32, 28, 28);
     border-radius: 4px;
     cursor: pointer;
 }
@@ -142,4 +140,16 @@ body {
     #clearAllTaskBtn {
         width: 30vw;
     }
+}
+/* Completed Task Format */
+.task.checked > .pendingSvg {
+    color: gray;
+}
+.task.checked > .taskText {
+    width: 83%;
+    color: gray;
+    text-decoration: line-through;
+}
+.task.checked > .editSvg {
+    display: none;
 }
