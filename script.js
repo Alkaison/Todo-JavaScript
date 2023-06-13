@@ -26,3 +26,12 @@ taskAddBtn.addEventListener("click", () => {
         alert("Task must be of at least 5 characters to be registered.");
 
 });
+
+// remove all childs of "taskContainer" class 
+clearAllTaskBtn.addEventListener("click", () => {
+
+    if(confirm("All the tasks will be cleared permanently."))
+    {
+        // taskContainer.removeChild();
+    }
+});
