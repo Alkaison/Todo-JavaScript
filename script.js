@@ -40,6 +40,11 @@ const editTaskText = (task) => {
     editTaskText.focus();
 }
 
+// delete the task when clicked on deleteIcon 
+const deleteTask = (task) => {
+    task.remove();
+};
+
 // add the task when click 
 taskAddBtn.addEventListener("click", () => {
     // get input field value 
@@ -61,6 +66,8 @@ taskAddBtn.addEventListener("click", () => {
     else
         alert("Task must be of at least 5 characters to be registered.");
 
+    taskInput.focus();
+
 });
 
 // check which task is clicked and which button is clicked 
@@ -70,9 +77,11 @@ taskContainer.addEventListener("click", (e) => {
 
     if(taskElement.classList.contains("task"))
     {
+        e.stopPropagation(); // Stop immediate propagation of the click event 
+
         // get the data value of clicked element 
         const clickedElement = e.target;
-        const data = clickedElement.getAttribute("data");;
+        const data = clickedElement.getAttribute("data");
 
         switch(data)
         {
@@ -80,11 +89,13 @@ taskContainer.addEventListener("click", (e) => {
                 completedTask(taskElement);
                 break;
             case 'task':
+                // does nothing for now 
                 break;
             case 'edit':
                 editTaskText(taskElement);
                 break;
             case 'delete':
+                deleteTask(taskElement);
                 break;
         }
     }
