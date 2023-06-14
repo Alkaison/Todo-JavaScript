@@ -2,9 +2,11 @@ const taskInput = document.querySelector("#taskInput");
 const taskAddBtn = document.querySelector("#addSvg");
 const taskContainer = document.querySelector(".task-container");
 const taskField = document.querySelector(".task");
+const taskCountText = document.querySelector("#clearAllTaskText");
 const clearAllTaskBtn = document.querySelector("#clearAllTaskBtn");
 const taskCompletedIcon = "fa-solid fa-circle-check pendingSvg";
 const taskUncompletedIcon = "fa-regular fa-circle pendingSvg";
+let taskCount = 3;
 
 const completedTask = (task) => {
 
@@ -22,6 +24,10 @@ const completedTask = (task) => {
         const shiftTask = task.cloneNode(true);
         task.remove();
         taskContainer.append(shiftTask);
+
+        // update task counts 
+        taskCount--;
+        updateTaskCount();
     }
     else
     {
@@ -29,6 +35,10 @@ const completedTask = (task) => {
         uncheckIcon.className = taskUncompletedIcon;
         editIcon.style.display = "block";
         task.classList.remove("checked");
+
+        // update task counts 
+        taskCount++;
+        updateTaskCount();
     }
 }
 
@@ -42,7 +52,12 @@ const editTaskText = (task) => {
 
 // delete the task when clicked on deleteIcon 
 const deleteTask = (task) => {
+    // remove the task from the list  
     task.remove();
+
+    // update task counts 
+    taskCount--;
+    updateTaskCount();
 };
 
 const addNewTask = () => {
@@ -60,6 +75,10 @@ const addNewTask = () => {
         // append the task and empty the inputBox value 
         taskContainer.append(newTaskField);
         taskInput.value = '';
+
+        // update task counts 
+        taskCount++;
+        updateTaskCount();
     }
     else
         alert("Task must be of at least 5 characters to be registered.");
@@ -108,6 +127,13 @@ taskContainer.addEventListener("click", (e) => {
     }
 });
 
+const updateTaskCount = () => {
+    if(taskCount === 0)
+        taskCountText.textContent = `Mission Accomplished!`;
+    else
+        taskCountText.textContent = `You have ${taskCount} pending tasks`;
+}
+
 // remove all childs of "taskContainer" class 
 clearAllTaskBtn.addEventListener("click", () => {
 
@@ -115,5 +141,9 @@ clearAllTaskBtn.addEventListener("click", () => {
     if(confirm("All the tasks will be cleared permanently."))
     {
         taskContainer.setHTML('');
+
+        // update task counts 
+        taskCount = 0;
+        updateTaskCount();
     }
 });
