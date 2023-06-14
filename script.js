@@ -51,6 +51,12 @@ const editTaskText = (task) => {
     const editTaskText = task.querySelector(".taskText");
     editTaskText.setAttribute("contenteditable", "true");
     editTaskText.focus();
+
+    // Listen for the blur event to detect when the user is done editing 
+    editTaskText.addEventListener("blur", () => {
+        // Make the task text uneditable 
+        editTaskText.setAttribute("contenteditable", "false");
+  });
 }
 
 // delete the task when clicked on deleteIcon 
