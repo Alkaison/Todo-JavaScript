@@ -11,6 +11,7 @@ const noTasksMessage = `<div class="completed">
                             <p>Add a task to plan your day.</p>
                         </div>`;
 
+// if user clicked on uncheck or check icon, format the task accordingly 
 const completedTask = (task) => {
 
     const uncheckIcon = task.querySelector("i.pendingSvg");
@@ -18,7 +19,7 @@ const completedTask = (task) => {
 
     if(uncheckIcon.className === taskUncompletedIcon)
     {
-        // update icon, disable edit 
+        // update icon, text and disable edit 
         uncheckIcon.className = taskCompletedIcon;
         editIcon.style.display = "none";
         task.classList.add("checked");
@@ -34,7 +35,7 @@ const completedTask = (task) => {
     }
     else
     {
-        // update icon, enable edit 
+        // update icon, text and enable edit 
         uncheckIcon.className = taskUncompletedIcon;
         editIcon.style.display = "block";
         task.classList.remove("checked");
@@ -45,6 +46,7 @@ const completedTask = (task) => {
     }
 }
 
+// edit the task text when clicked on editIcon 
 const editTaskText = (task) => {
     
     // make the task text editable 
@@ -69,6 +71,7 @@ const deleteTask = (task) => {
     updateTaskCount();
 };
 
+// add new task to the list when clicked on plusIcon or pressed Enter key 
 const addNewTask = () => {
     // get input field value 
     const newTask = taskInput.value;
@@ -149,7 +152,7 @@ const updateTaskCount = () => {
     else
         taskCountText.textContent = `You have ${taskCount} pending tasks`;
 
-    // check for no tasks in list 
+    // check if noTasksMessage can be added 
     if(taskCount < 2)
         updateNoTaskMessage();
 }
@@ -163,6 +166,7 @@ const updateNoTaskMessage = () => {
     else if(taskCount === 1)
     {
         try {
+            // if newTask is added remove the noTasksMessage 
             const removeMessage = taskContainer.querySelector(".completed");
             removeMessage.remove();
         }
