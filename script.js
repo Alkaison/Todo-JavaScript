@@ -16,6 +16,7 @@ const completedTask = (task) => {
 
     const uncheckIcon = task.querySelector("i.pendingSvg");
     const editIcon = task.querySelector("i.editSvg");
+    const taskId = Number.parseInt(task.getAttribute("taskid"));
 
     if(uncheckIcon.className === taskUncompletedIcon)
     {
@@ -32,6 +33,9 @@ const completedTask = (task) => {
         // update task counts 
         taskCount--;
         updateTaskCount();
+
+        // update the localStorage data 
+        updateTaskStatus(true, taskId);
     }
     else
     {
@@ -43,6 +47,9 @@ const completedTask = (task) => {
         // update task counts 
         taskCount++;
         updateTaskCount();
+        
+        // update the localStorage data 
+        updateTaskStatus(false, taskId);
     }
 }
 
@@ -58,12 +65,19 @@ const editTaskText = (task) => {
     editTaskText.addEventListener("blur", () => {
         // Make the task text uneditable 
         editTaskText.setAttribute("contenteditable", "false");
+
+        // update task text into local storage 
+        updateTaskTextInStorage(task);
   });
 }
 
 // delete the task when clicked on deleteIcon 
 const deleteTask = (task) => {
-    // remove the task from the list  
+    
+    // delete task from storage 
+    deleteTaskFromStorage(task);
+
+    // remove the task from the list 
     task.remove();
 
     // update task counts 
@@ -91,6 +105,9 @@ const addNewTask = () => {
         // update task counts 
         taskCount++;
         updateTaskCount();
+
+        // add the task data to localStorage 
+        addNewTaskToLocalStorage(newTaskField);
     }
     else
         alert("Task must be of at least 5 characters to be registered.");
@@ -190,5 +207,183 @@ clearAllTaskBtn.addEventListener("click", () => {
 
         // focus the input box for typing 
         taskInput.focus();
+
+        // format the localStorage for tasks data 
+        localStorage.setItem("tasks", JSON.stringify([]));
     }
 });
+
+// get data from local storage 
+const loadData = () => {
+    const tasks = JSON.parse(localStorage.getItem("tasks"));
+    return tasks ? tasks : [];
+}
+
+// list the tasks from storage 
+const listTasksFromStorage = () => {
+    
+    // get data from local storage 
+    const tasksData = loadData();
+    taskCount = 0;
+
+    // clear the task-container 
+    taskContainer.innerHTML = '';
+
+    // list down the tasks 
+    for(const task of tasksData)
+    {
+        const newTaskField = taskField.cloneNode(true);
+
+        // select the task text field and the text from storage 
+        const newTaskText = newTaskField.querySelector(".taskText");
+        newTaskText.textContent = task.text;
+
+        // if true add the checked class 
+        if(task.completed)
+        {
+            newTaskField.classList.add("checked");
+            const uncheckIcon = newTaskField.querySelector("i.pendingSvg");
+            uncheckIcon.className = taskCompletedIcon;
+        }
+        else
+            taskCount++;
+        
+        // add taskid to tasks 
+        newTaskField.setAttribute("taskid", task.id);
+
+        // append the task 
+        taskContainer.append(newTaskField);
+    }
+
+    // update the taskCount 
+    updateTaskCount();
+}
+
+// add initial tasks to the local storage 
+const executeOnceOnVisit = () => {
+
+    // function to add initial tasks data if visited first time 
+    const addInitialTasks = () => {
+        // initial 3 tasks data 
+        const initialTasks = [
+            {
+                id: 1,
+                text: "Follow @Alkaison on Twitter",
+                completed: false
+            },
+            {
+                id: 2,
+                text: "Complete the first task",
+                completed: false
+            },
+            {
+                id: 3,
+                text: "Thank you for visiting here",
+                completed: false
+            }
+        ];
+        localStorage.setItem("tasks", JSON.stringify(initialTasks));
+        localStorage.setItem("firstVisit", true);
+        localStorage.setItem("taskId", 3);
+    }
+
+    // check if the user came first time 
+    const firstVisit = localStorage.getItem("firstVisit");
+
+    if(!firstVisit)
+        addInitialTasks();
+    else
+        listTasksFromStorage();
+}
+
+// execute on first visit 
+executeOnceOnVisit();
+
+// generate new taskID 
+const getNewTaskID = () => {
+    let currentTaskID = localStorage.getItem("taskId");
+    currentTaskID++;
+    localStorage.setItem("taskId", currentTaskID);
+    return currentTaskID;
+}
+
+// add new Task data to local storage 
+const addNewTaskToLocalStorage = (newTaskData) => {
+
+    // select task text and add the taskId 
+    const taskText = newTaskData.querySelector(".taskText").textContent;
+    taskId = getNewTaskID();
+    newTaskData.setAttribute("taskid", taskId);
+
+    // load existing data from localStorage 
+    const tasksData = loadData();
+
+    const newData = {
+        id: taskId,
+        text: taskText,
+        completed: false
+    }
+
+    // add the data and update localStorage 
+    tasksData.push(newData);
+    localStorage.setItem("tasks", JSON.stringify(tasksData));
+}
+
+// delete data from localStorage 
+const deleteTaskFromStorage = (deleteTask) => {
+    
+    // get data from local storage 
+    const tasksData = loadData();
+
+    // get task id from task-element 
+    const ID = deleteTask.getAttribute("taskid");
+
+    // filter and remove the task id data from storage 
+    const newTasksData = tasksData.filter((task) => task.id != ID);
+
+    // update the localStorage data 
+    localStorage.setItem("tasks", JSON.stringify(newTasksData));
+}
+
+// task completed or not 
+const updateTaskStatus = (status, taskId) => {
+
+    // get data from local storage 
+    const tasksData = loadData();
+
+    // update status of task 
+    for(const task of tasksData)
+    {
+        if(task.id === taskId)
+        {
+            task.completed = status;
+        }
+    }
+
+    // update the data at local storage 
+    localStorage.setItem("tasks", JSON.stringify(tasksData));
+}
+
+// update task text into local storage 
+const updateTaskTextInStorage = (task) => {
+
+    // get data from local storage 
+    const tasksData = loadData();
+
+    // select task text 
+    const taskText = task.querySelector(".taskText").textContent;
+
+    const taskId = Number.parseInt(task.getAttribute("taskid"));
+
+    // update text of task 
+    for(const task of tasksData)
+    {
+        if(task.id === taskId)
+        {
+            task.text = taskText;
+        }
+    }
+
+    // update the data at local storage 
+    localStorage.setItem("tasks", JSON.stringify(tasksData));
+}
