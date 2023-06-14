@@ -45,13 +45,11 @@ const deleteTask = (task) => {
     task.remove();
 };
 
-// add the task when click 
-taskAddBtn.addEventListener("click", () => {
+const addNewTask = () => {
     // get input field value 
     const newTask = taskInput.value;
 
-    if(newTask !== '' && newTask.length >= 5)
-    {
+    if (newTask !== '' && newTask.length >= 5) {
         // cloning the structure of tasks 
         const newTaskField = taskField.cloneNode(true);
 
@@ -59,15 +57,24 @@ taskAddBtn.addEventListener("click", () => {
         const newTaskText = newTaskField.querySelector(".taskText");
         newTaskText.textContent = newTask;
 
+        // append the task and empty the inputBox value 
         taskContainer.append(newTaskField);
-
         taskInput.value = '';
     }
     else
         alert("Task must be of at least 5 characters to be registered.");
 
+    // focus the input box for typing 
     taskInput.focus();
+}
 
+// add the task when clicked plusIcon 
+taskAddBtn.addEventListener("click", addNewTask);
+
+// add the task when pressed Enter key 
+taskInput.addEventListener("keydown", (e) => {
+    if(e.key === "Enter")
+        addNewTask();
 });
 
 // check which task is clicked and which button is clicked 
@@ -104,6 +111,7 @@ taskContainer.addEventListener("click", (e) => {
 // remove all childs of "taskContainer" class 
 clearAllTaskBtn.addEventListener("click", () => {
 
+    // ask for confirmation 
     if(confirm("All the tasks will be cleared permanently."))
     {
         taskContainer.setHTML('');
