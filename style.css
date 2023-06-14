@@ -153,3 +153,7 @@ body {
 .task.checked > .editSvg {
     display: none;
 }
+/* No Task Message */
+.completed {
+    text-align: center;
+}

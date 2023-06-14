@@ -7,6 +7,9 @@ const clearAllTaskBtn = document.querySelector("#clearAllTaskBtn");
 const taskCompletedIcon = "fa-solid fa-circle-check pendingSvg";
 const taskUncompletedIcon = "fa-regular fa-circle pendingSvg";
 let taskCount = 3;
+const noTasksMessage = `<div class="completed">
+                            <p>Add a task to plan your day.</p>
+                        </div>`;
 
 const completedTask = (task) => {
 
@@ -127,11 +130,40 @@ taskContainer.addEventListener("click", (e) => {
     }
 });
 
+// update the count of pending tasks 
 const updateTaskCount = () => {
+
+    // reset the taskCount 
+    if(taskCount < 0)
+        taskCount = 0;
+
+    // check whether all tasks completed 
     if(taskCount === 0)
         taskCountText.textContent = `Mission Accomplished!`;
     else
         taskCountText.textContent = `You have ${taskCount} pending tasks`;
+
+    // check for no tasks in list 
+    if(taskCount < 2)
+        updateNoTaskMessage();
+}
+
+// add the message when no tasks are listed 
+const updateNoTaskMessage = () => {
+
+    // if there's nothing in task-container, show the message 
+    if(taskContainer.childElementCount === 0)
+        taskContainer.setHTML(noTasksMessage);
+    else if(taskCount === 1)
+    {
+        try {
+            const removeMessage = taskContainer.querySelector(".completed");
+            removeMessage.remove();
+        }
+        catch(error) {
+            // do nothing :) 
+        }
+    }
 }
 
 // remove all childs of "taskContainer" class 
@@ -145,5 +177,8 @@ clearAllTaskBtn.addEventListener("click", () => {
         // update task counts 
         taskCount = 0;
         updateTaskCount();
+
+        // focus the input box for typing 
+        taskInput.focus();
     }
 });
