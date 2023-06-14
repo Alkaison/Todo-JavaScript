@@ -8,8 +8,28 @@ const taskUncompletedIcon = "fa-regular fa-circle pendingSvg";
 
 const completedTask = (task) => {
 
-    // if the task sign is uncheck then check it, visa-versa
-    task.className = task.className === taskUncompletedIcon ? taskCompletedIcon : taskUncompletedIcon;
+    const uncheckIcon = task.querySelector("i.pendingSvg");
+    const editIcon = task.querySelector("i.editSvg");
+
+    if(uncheckIcon.className === taskUncompletedIcon)
+    {
+        // update icon, disable edit 
+        uncheckIcon.className = taskCompletedIcon;
+        editIcon.style.display = "none";
+        task.classList.add("checked");
+
+        // shift the completed task to the end 
+        const shiftTask = task.cloneNode(true);
+        task.remove();
+        taskContainer.append(shiftTask);
+    }
+    else
+    {
+        // update icon, enable edit 
+        uncheckIcon.className = taskUncompletedIcon;
+        editIcon.style.display = "block";
+        task.classList.remove("checked");
+    }
 }
 
 const editTaskText = (task) => {
@@ -57,7 +77,7 @@ taskContainer.addEventListener("click", (e) => {
         switch(data)
         {
             case 'check':
-                completedTask(clickedElement);
+                completedTask(taskElement);
                 break;
             case 'task':
                 break;
