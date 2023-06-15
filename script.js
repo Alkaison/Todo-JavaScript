@@ -3,6 +3,7 @@ const taskAddBtn = document.querySelector("#addSvg");
 const taskContainer = document.querySelector(".task-container");
 const taskField = document.querySelector(".task");
 const taskCountText = document.querySelector("#clearAllTaskText");
+const filterSelected = document.querySelector("#filter-list");
 const clearAllTaskBtn = document.querySelector("#clearAllTaskBtn");
 const taskCompletedIcon = "fa-solid fa-circle-check pendingSvg";
 const taskUncompletedIcon = "fa-regular fa-circle pendingSvg";
@@ -24,11 +25,6 @@ const completedTask = (task) => {
         uncheckIcon.className = taskCompletedIcon;
         editIcon.style.display = "none";
         task.classList.add("checked");
-
-        // shift the completed task to the end 
-        const shiftTask = task.cloneNode(true);
-        task.remove();
-        taskContainer.append(shiftTask);
 
         // update task counts 
         taskCount--;
@@ -259,6 +255,80 @@ const listTasksFromStorage = () => {
     updateTaskCount();
 }
 
+// list only active tasks 
+const listActiveTask = () => {
+
+    // get data from local storage 
+    const tasksData = loadData();
+    taskCount = 0;
+
+    // clear the task-container 
+    taskContainer.innerHTML = '';
+
+    // list down the tasks 
+    for(const task of tasksData)
+    {
+        // if the task is incomplete list it 
+        if(!task.completed)
+        {
+            const newTaskField = taskField.cloneNode(true);
+
+            // select the task text field and the text from storage 
+            const newTaskText = newTaskField.querySelector(".taskText");
+            newTaskText.textContent = task.text;
+
+            // add taskid to tasks 
+            newTaskField.setAttribute("taskid", task.id);
+
+            // append the task 
+            taskContainer.append(newTaskField);
+
+            taskCount++;
+        }
+    }
+    // update the taskCount 
+    updateTaskCount();
+}
+
+// list completed Tasks 
+const listCompletedTasks = () => {
+
+    // get data from local storage 
+    const tasksData = loadData();
+
+    // clear the task-container 
+    taskContainer.innerHTML = '';
+
+    // list down the tasks 
+    for(const task of tasksData)
+    {
+        // if the task is incomplete list it 
+        if(task.completed)
+        {
+            const newTaskField = taskField.cloneNode(true);
+
+            // select the task text field and the text from storage 
+            const newTaskText = newTaskField.querySelector(".taskText");
+            newTaskText.textContent = task.text;
+
+            // add taskid to tasks 
+            newTaskField.setAttribute("taskid", task.id);
+
+            // change the sign to checked 
+            newTaskField.classList.add("checked");
+            const uncheckIcon = newTaskField.querySelector("i.pendingSvg");
+            uncheckIcon.className = taskCompletedIcon;
+
+            // append the task 
+            taskContainer.append(newTaskField);
+        }
+    }
+
+    // update the taskCount 
+    taskCount = 0;
+    updateTaskCount();
+}
+
 // add initial tasks to the local storage 
 const executeOnceOnVisit = () => {
 
@@ -387,3 +457,26 @@ const updateTaskTextInStorage = (task) => {
     // update the data at local storage 
     localStorage.setItem("tasks", JSON.stringify(tasksData));
 }
+
+// filter the tasks as All, Active, completed 
+filterSelected.addEventListener("change", (e) => {
+    
+    // get the selected value 
+    const filterValue = e.target.value;
+
+    // execute functions as per value 
+    switch(filterValue)
+    {
+        case "all":
+            listTasksFromStorage();
+            break;
+        case "active":
+            listActiveTask();
+            break;
+        case "completed":
+            listCompletedTasks();
+            break;
+        default:
+            // do nothing :) 
+    }
+});

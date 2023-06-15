@@ -33,7 +33,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 4px;
-    margin-bottom: 12px;
+    margin-bottom: 6px;
 }
 #taskInput {
     width: 85%;
@@ -57,6 +57,21 @@ body {
     background-color: #8E49E9;
     border: 2px solid transparent;
     border-radius: 4px;
+    cursor: pointer;
+}
+/* Filter Tasks */
+.filter-tasks {
+    padding: 4px 8px;
+    margin-bottom: 8px;
+}
+#filter-list {
+    font-size: 18px;
+    border: transparent;
+    outline: transparent;
+    border-radius: 4px;
+    padding: 4px;
+    color: white;
+    background-color: #2D3E50;
     cursor: pointer;
 }
 /* Tasks */
