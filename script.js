@@ -7,47 +7,34 @@ const filterSelected = document.querySelector("#filter-list");
 const clearAllTaskBtn = document.querySelector("#clearAllTaskBtn");
 const taskCompletedIcon = "fa-solid fa-circle-check pendingSvg";
 const taskUncompletedIcon = "fa-regular fa-circle pendingSvg";
+
+// task counter for stating the number of pending tasks 
 let taskCount = 3;
+
+// this is message is to shown when there's no tasks inside container 
 const noTasksMessage = `<div class="completed">
                             <p>Add a task to plan your day.</p>
                         </div>`;
 
 // if user clicked on uncheck or check icon, format the task accordingly 
 const completedTask = (task) => {
-
     const uncheckIcon = task.querySelector("i.pendingSvg");
     const editIcon = task.querySelector("i.editSvg");
     const taskId = Number.parseInt(task.getAttribute("taskid"));
+    const isTaskCompleted = uncheckIcon.className === taskUncompletedIcon;
 
-    if(uncheckIcon.className === taskUncompletedIcon)
-    {
-        // update icon, text and disable edit 
-        uncheckIcon.className = taskCompletedIcon;
-        editIcon.style.display = "none";
-        task.classList.add("checked");
+    // Update icon, text, and edit display using a conditional operator 
+    uncheckIcon.className = isTaskCompleted ? taskCompletedIcon : taskUncompletedIcon;
+    editIcon.style.display = isTaskCompleted ? "none" : "block";
+    task.classList.toggle("checked", isTaskCompleted);
 
-        // update task counts 
-        taskCount--;
-        updateTaskCount();
+    // Update the localStorage data 
+    updateTaskStatus(isTaskCompleted, taskId);
 
-        // update the localStorage data 
-        updateTaskStatus(true, taskId);
-    }
-    else
-    {
-        // update icon, text and enable edit 
-        uncheckIcon.className = taskUncompletedIcon;
-        editIcon.style.display = "block";
-        task.classList.remove("checked");
-
-        // update task counts 
-        taskCount++;
-        updateTaskCount();
-        
-        // update the localStorage data 
-        updateTaskStatus(false, taskId);
-    }
-}
+    // Update task count 
+    taskCount += isTaskCompleted ? -1 : 1;
+    updateTaskCount();
+};
 
 // edit the task text when clicked on editIcon 
 const editTaskText = (task) => {
@@ -140,7 +127,7 @@ taskContainer.addEventListener("click", (e) => {
                 completedTask(taskElement);
                 break;
             case 'task':
-                // does nothing for now 
+                // do nothing :) 
                 break;
             case 'edit':
                 editTaskText(taskElement);
@@ -175,7 +162,7 @@ const updateNoTaskMessage = () => {
 
     // if there's nothing in task-container, show the message 
     if(taskContainer.childElementCount === 0)
-        taskContainer.setHTML(noTasksMessage);
+        taskContainer.innerHTML = noTasksMessage;
     else if(taskCount === 1)
     {
         try {
@@ -184,7 +171,7 @@ const updateNoTaskMessage = () => {
             removeMessage.remove();
         }
         catch(error) {
-            // do nothing :) 
+            console.log(`${error}`);
         }
     }
 }
