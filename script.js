@@ -42,17 +42,28 @@ const editTaskText = (task) => {
     
     // make the task text editable 
     const editTaskText = task.querySelector(".taskText");
+    const previousTaskText = editTaskText.textContent;
     editTaskText.setAttribute("contenteditable", "true");
     editTaskText.focus();
 
     // Listen for the blur event to detect when the user is done editing 
-    editTaskText.addEventListener("blur", () => {
+    editTaskText.addEventListener("blur", (e) => {
+
         // Make the task text uneditable 
         editTaskText.setAttribute("contenteditable", "false");
 
-        // update task text into local storage 
+        // remove unwanted spaces 
+        editTaskText.textContent = editTaskText.textContent.trim();
+
+        // if the newTaskText is less than 5 characters, then update to prevoius task text 
+        if(editTaskText.textContent === '' || editTaskText.textContent.length < 5)
+        {
+            editTaskText.textContent = previousTaskText;
+        }
+
+        // update task text in storage 
         updateTaskTextInStorage(task);
-  });
+    });
 }
 
 // delete the task when clicked on deleteIcon 
@@ -76,8 +87,8 @@ const addNewTask = () => {
     inValidTaskLength.style.display = "none";
     taskInput.style.border = "1.5px solid gray";
 
-    // get input field value 
-    const newTask = taskInput.value;
+    // get input field value and remove unwanted spaces 
+    const newTask = taskInput.value.trim();
 
     if (newTask !== '' && newTask.length >= 5) {
         // cloning the structure of tasks 
