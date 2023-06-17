@@ -33,7 +33,6 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 4px;
-    margin-bottom: 6px;
 }
 #taskInput {
     width: 85%;
@@ -58,6 +57,12 @@ body {
     border: 2px solid transparent;
     border-radius: 4px;
     cursor: pointer;
+}
+/* Task length error */
+.task-length-error {
+    color: red;
+    margin-left: 8px;
+    margin-bottom: 12px;
 }
 /* Filter Tasks */
 .filter-tasks {

@@ -2,6 +2,7 @@ const taskInput = document.querySelector("#taskInput");
 const taskAddBtn = document.querySelector("#addSvg");
 const taskContainer = document.querySelector(".task-container");
 const taskField = document.querySelector(".task");
+const inValidTaskLength = document.querySelector(".task-length-error");
 const taskCountText = document.querySelector("#clearAllTaskText");
 const filterSelected = document.querySelector("#filter-list");
 const clearAllTaskBtn = document.querySelector("#clearAllTaskBtn");
@@ -70,6 +71,11 @@ const deleteTask = (task) => {
 
 // add new task to the list when clicked on plusIcon or pressed Enter key 
 const addNewTask = () => {
+
+    // reset the error message 
+    inValidTaskLength.style.display = "none";
+    taskInput.style.border = "1.5px solid gray";
+
     // get input field value 
     const newTask = taskInput.value;
 
@@ -93,7 +99,10 @@ const addNewTask = () => {
         addNewTaskToLocalStorage(newTaskField);
     }
     else
-        alert("Task must be of at least 5 characters to be registered.");
+    {
+        inValidTaskLength.style.display = "block";
+        taskInput.style.border = "1.5px solid red";
+    }
 
     // focus the input box for typing 
     taskInput.focus();
